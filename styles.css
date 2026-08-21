@@ -338,3 +338,159 @@ section{
   .footer-shell{flex-direction:column;align-items:flex-start;gap:18px;padding:0 18px}
   .footer-reach{white-space:normal}
 }
+
+
+/* V7 — revisão final de alturas e respiros */
+
+/* Abertura: aproxima o conteúdo do cabeçalho */
+.hero{
+  padding-top:28px!important;
+  padding-bottom:34px!important;
+  min-height:auto!important;
+}
+.hero-content{
+  padding-top:0!important;
+  margin-top:0!important;
+}
+.hero .eyebrow{
+  margin-top:0!important;
+}
+.hero h1{
+  margin-top:14px!important;
+  margin-bottom:18px!important;
+}
+.hero-subtitle,.hero-copy{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.hero-actions{
+  margin-top:22px!important;
+  margin-bottom:0!important;
+}
+.hero-panel{
+  margin-top:0!important;
+}
+
+/* Mantém a seção de produtos como aprovada na V6 */
+#cafes,.products-section{
+  padding-top:54px!important;
+  padding-bottom:54px!important;
+}
+
+/* Seção preta do passo a passo: remove altura excessiva */
+.how-it-works,.steps-section,.process-section{
+  min-height:auto!important;
+  padding-top:42px!important;
+  padding-bottom:38px!important;
+}
+.how-it-works .section-inner,
+.steps-section .section-inner,
+.process-section .section-inner{
+  padding-top:0!important;
+  padding-bottom:0!important;
+}
+.how-it-works .section-kicker,
+.steps-section .section-kicker,
+.process-section .section-kicker{
+  margin-top:0!important;
+  margin-bottom:14px!important;
+}
+.how-it-works h2,.steps-section h2,.process-section h2{
+  margin-top:0!important;
+  margin-bottom:20px!important;
+}
+.steps-grid,.process-grid{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.step-card,.process-card{
+  min-height:0!important;
+  padding:20px 22px!important;
+}
+
+/* Rodapé mais próximo da seção anterior */
+.site-footer{
+  margin-top:0!important;
+  padding-top:24px!important;
+  padding-bottom:24px!important;
+}
+.footer-shell{
+  min-height:0!important;
+}
+
+@media(max-width:760px){
+  .hero{
+    padding-top:22px!important;
+    padding-bottom:28px!important;
+  }
+  .hero h1{
+    margin-top:10px!important;
+    margin-bottom:14px!important;
+  }
+  .how-it-works,.steps-section,.process-section{
+    padding-top:32px!important;
+    padding-bottom:30px!important;
+  }
+  .step-card,.process-card{
+    padding:18px!important;
+  }
+  .site-footer{
+    padding-top:22px!important;
+    padding-bottom:22px!important;
+  }
+}
+
+
+/* V8 — compactação específica do bloco preto "Escolha. Confira. Envie." */
+.how-it-works,
+.steps-section,
+.process-section{
+  min-height:0!important;
+  height:auto!important;
+  padding-top:18px!important;
+  padding-bottom:18px!important;
+}
+
+.how-it-works .section-inner,
+.steps-section .section-inner,
+.process-section .section-inner{
+  min-height:0!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+.how-it-works .section-kicker,
+.steps-section .section-kicker,
+.process-section .section-kicker{
+  margin-top:0!important;
+  margin-bottom:10px!important;
+}
+
+.how-it-works h2,
+.steps-section h2,
+.process-section h2{
+  margin-top:0!important;
+  margin-bottom:16px!important;
+}
+
+.steps-grid,
+.process-grid{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+.step-card,
+.process-card{
+  margin-bottom:0!important;
+}
+
+@media(max-width:760px){
+  .how-it-works,
+  .steps-section,
+  .process-section{
+    padding-top:20px!important;
+    padding-bottom:20px!important;
+  }
+}
