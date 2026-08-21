@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#171512" />
+  <title>Comprar Café Rafa Palma | Torra Próia</title>
+  <meta name="description" content="Compre Café Rafa Palma em grãos ou moído. Torra própria e envio para todo o Brasil." />
+  <meta property="og:title" content="Comprar Café Rafa Palma | Torra Própria" />
+  <meta property="og:description" content="Torra própria, em grãos ou moído, envio para todo o Brasil." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Rafa Palma - início">
+      <span class="brand-mark">RP</span>
+      <span class="brand-text"><strong>RAFA PALMA</strong><small>TORRA PRÓPRIA</small></span>
+    </a>
+    <button class="cart-button" id="openCartBtn" type="button" aria-label="Abrir meu pedido">
+      Meu pedido <span id="cartBadge" class="cart-badge">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-content">
+        <span class="eyebrow">CAFÉ RAFA PALMA</span>
+        <h1>Café recém-torrado, do nosso jeito para o seu.</h1>
+        <p class="hero-subtitle">Torra própria, em grãos ou moído, envio para todo o Brasil.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#cafes">Fazer meu pedido</a>
+          <span class="hero-note">Café: o afeto ao redor da mesa.</span>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label="Informações da torrefação">
+        <div><strong>Torra própria</strong><span>Palmeira das Missões · RS</span></div>
+        <div><strong>Escolha sua moagem</strong><span>De acordo com o seu método</span></div>
+        <div><strong>Pedido simples</strong><span>Finalização pelo WhatsApp</span></div>
+      </div>
+    </section>
+
+    <section id="cafes" class="section products-section">
+      <div class="section-heading">
+        <span class="eyebrow">ESCOLHA SEU CAFÉ</span>
+        <h2>Seu pedido começa aqui.</h2>
+        <p>Selecione a embalagem, escolha entre grãos ou moído e adicione ao seu pedido.</p>
+      </div>
+      <div id="productsGrid" class="products-grid"></div>
+    </section>
+
+    <section class="section how-section">
+      <div class="section-heading compact">
+        <span class="eyebrow">SIMPLES DO INÍCIO AO FIM</span>
+        <h2>Escolha. Confira. Envie.</h2>
+      </div>
+      <div class="steps">
+        <article><span>01</span><h3>Escolha o café</h3><p>Defina tamanho, grãos ou moído e a quantidade.</p></article>
+        <article><span>02</span><h3>Confira o pedido</h3><p>Veja todos os itens e o total antes de continuar.</p></article>
+        <article><span>03</span><h3>Informe a entrega</h3><p>Retire ou informe o endereço para receber.</p></article>
+        <article><span>04</span><h3>Finalize no WhatsApp</h3><p>O pedido chega organizado para a Rafa Palma.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-header">
+      <div><span class="eyebrow">CARRINHO</span><h2>Meu pedido</h2></div>
+      <button id="closeCartBtn" class="icon-button" type="button" aria-label="Fechar carrinho">×</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div id="cartEmpty" class="cart-empty">
+      <strong>Seu pedido está vazio.</strong>
+      <p>Escolha um dos cafés para começar.</p>
+      <button class="btn btn-secondary" id="continueShoppingEmpty" type="button">Escolher cafés</button>
+    </div>
+    <div id="cartFooter" class="cart-footer hidden">
+      <div class="total-row"><span>Total dos produtos</span><strong id="cartTotal">R$ 0,00</strong></div>
+      <p class="freight-note">Frete não está incluído. Ele será confirmado antes do pagamento.</p>
+      <button class="btn btn-primary btn-full" id="checkoutBtn" type="button">Continuar pedido</button>
+      <button class="link-button" id="continueShoppingBtn" type="button">Continuar comprando</button>
+    </div>
+  </aside>
+  <div id="overlay" class="overlay" hidden></div>
+
+  <section class="checkout-modal" id="checkoutModal" aria-hidden="true">
+    <div class="checkout-shell">
+      <div class="checkout-top">
+        <div>
+          <span class="eyebrow">FINALIZAÇÃO</span>
+          <h2 id="checkoutTitle">Seus dados</h2>
+        </div>
+        <button id="closeCheckoutBtn" class="icon-button" type="button" aria-label="Fechar finalização">×</button>
+      </div>
+
+      <div class="progress" aria-label="Etapas do pedido">
+        <span class="active" data-step-dot="1">1</span><i></i><span data-step-dot="2">2</span><i></i><span data-step-dot="3">3</span>
+      </div>
+
+      <form id="checkoutForm" novalidate>
+        <div class="checkout-step active" data-step="1">
+          <div class="field-grid">
+            <label class="field field-wide">Nome completo<input name="name" autocomplete="name" required /></label>
+            <label class="field">CPF<input name="cpf" inputmode="numeric" autocomplete="off" required /></label>
+            <label class="field">WhatsApp<input name="phone" inputmode="tel" autocomplete="tel" required /></label>
+            <label class="field field-wide">E-mail<input name="email" type="email" autocomplete="email" required /></label>
+          </div>
+          <div class="step-actions"><button class="btn btn-primary" type="button" data-next="2">Continuar</button></div>
+        </div>
+
+        <div class="checkout-step" data-step="2">
+          <fieldset class="delivery-choice">
+            <legend>Como você quer receber seu Café Rafa Palma?</legend>
+            <label class="choice-card"><input type="radio" name="delivery" value="retirada" checked /><span><strong>Retirar</strong><small>Retirada conforme orientação da Rafa Palma.</small></span></label>
+            <label class="choice-card"><input type="radio" name="delivery" value="envio" /><span><strong>Receber</strong><small>Informe seu endereço para envio.</small></span></label>
+          </fieldset>
+          <div id="addressFields" class="field-grid hidden">
+            <label class="field">CEP<input name="cep" inputmode="numeric" autocomplete="postal-code" /></label>
+            <label class="field">Número<input name="number" autocomplete="address-line2" /></label>
+            <label class="field field-wide">Rua<input name="street" autocomplete="address-line1" /></label>
+            <label class="field">Complemento<input name="complement" autocomplete="address-line2" /></label>
+            <label class="field">Bairro<input name="district" /></label>
+            <label class="field">Cidade<input name="city" autocomplete="address-level2" /></label>
+            <label class="field">Estado<input name="state" maxlength="2" autocomplete="address-level1" /></label>
+            <p class="field-wide form-note">O valor do frete será confirmado pela Rafa Palma antes do pagamento.</p>
+          </div>
+          <div class="step-actions split"><button class="btn btn-secondary" type="button" data-back="1">Voltar</button><button class="btn btn-primary" type="button" data-next="3">Revisar pedido</button></div>
+        </div>
+
+        <div class="checkout-step" data-step="3">
+          <div id="orderReview" class="order-review"></div>
+          <label class="field field-wide">Observações do pedido<textarea name="notes" rows="3" placeholder="Opcional"></textarea></label>
+          <div class="step-actions split"><button class="btn btn-secondary" type="button" data-back="2">Voltar</button><button class="btn btn-whatsapp" type="submit">Finalizar pelo WhatsApp</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div><strong>RAFA PALMA</strong><span>Torra própria · Palmeira das Missões–RS</span></div>
+    <p>Atendimento em todo o Brasil.</p>
+  </footer>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
