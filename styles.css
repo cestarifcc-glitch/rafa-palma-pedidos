@@ -216,3 +216,38 @@ footer,.site-footer{
 @media(prefers-color-scheme:dark){
   html,body,input,select,textarea,button{color-scheme:light!important}
 }
+
+
+/* V5 — integração com rafapalma.com.br */
+.topbar{
+  min-height:84px;
+  padding-top:10px!important;
+  padding-bottom:10px!important;
+}
+.brand img{
+  width:164px!important;
+  max-height:62px!important;
+  object-fit:contain;
+  object-position:left center;
+}
+.topbar-actions{display:flex;align-items:center;gap:16px}
+.back-site{
+  color:#d8c8ba;
+  text-decoration:none;
+  font-size:.78rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+.back-site:hover{color:#fff}
+.cart-button{
+  background:#954430!important;
+  border-color:#954430!important;
+  color:#fff!important;
+}
+@media(max-width:680px){
+  .topbar{min-height:74px;padding:8px 14px!important}
+  .brand img{width:124px!important;max-height:52px!important}
+  .back-site{display:none}
+  .topbar-actions{gap:8px}
+  .cart-button{padding:10px 12px!important;font-size:.82rem!important}
+}
