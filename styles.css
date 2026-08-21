@@ -251,3 +251,90 @@ footer,.site-footer{
   .topbar-actions{gap:8px}
   .cart-button{padding:10px 12px!important;font-size:.82rem!important}
 }
+
+
+/* V6 — compactação geral */
+.hero{
+  padding-top:64px!important;
+  padding-bottom:46px!important;
+}
+.hero h1{
+  font-size:clamp(2.35rem,5.2vw,4.55rem)!important;
+  line-height:.98!important;
+  max-width:760px!important;
+}
+.hero-actions{margin-top:22px!important}
+.hero-panel{margin-top:24px!important}
+.trust-strip{
+  margin:-14px auto 22px!important;
+}
+section{
+  scroll-margin-top:90px;
+}
+#cafes,.products-section{
+  padding-top:54px!important;
+  padding-bottom:54px!important;
+}
+#cafes .section-head,.products-section .section-head{
+  margin-bottom:28px!important;
+}
+.product-grid,.products-grid{
+  gap:22px!important;
+}
+.how-it-works,.steps-section,.process-section{
+  padding-top:58px!important;
+  padding-bottom:54px!important;
+}
+.how-it-works h2,.steps-section h2,.process-section h2{
+  font-size:clamp(2.2rem,4.4vw,4rem)!important;
+  margin-bottom:24px!important;
+}
+.steps-grid,.process-grid{
+  gap:16px!important;
+}
+.step-card,.process-card{
+  padding-top:24px!important;
+  padding-bottom:24px!important;
+}
+.site-footer{
+  padding:28px 0!important;
+  border-top:1px solid rgba(241,230,216,.22);
+}
+.footer-shell{
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 24px;
+  display:flex;
+  justify-content:space-between;
+  gap:32px;
+  align-items:flex-end;
+}
+.footer-brand{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  font-size:.9rem;
+  line-height:1.45;
+}
+.footer-brand strong{
+  font-size:1rem;
+  letter-spacing:.06em;
+}
+.footer-brand a{
+  color:inherit;
+  text-decoration:none;
+}
+.footer-brand a:hover{text-decoration:underline}
+.footer-reach{
+  font-weight:700;
+  white-space:nowrap;
+}
+@media(max-width:760px){
+  .hero{padding-top:34px!important;padding-bottom:32px!important}
+  .hero h1{font-size:clamp(2.15rem,10vw,3.15rem)!important;line-height:.98!important}
+  .trust-strip{margin:-8px auto 18px!important}
+  #cafes,.products-section{padding-top:38px!important;padding-bottom:42px!important}
+  .how-it-works,.steps-section,.process-section{padding-top:42px!important;padding-bottom:40px!important}
+  .footer-shell{flex-direction:column;align-items:flex-start;gap:18px;padding:0 18px}
+  .footer-reach{white-space:normal}
+}

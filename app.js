@@ -207,13 +207,15 @@ function renderReview(){
   let html=`<div class="review-line"><div><strong>${form.name.value}</strong><small>${form.phone.value} · ${form.email.value}</small></div></div>`;
   html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${i.method}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
   const delivery=form.delivery.value==='retirada'?'Retirada':`${form.street.value}, ${form.number.value} · ${form.district.value} · ${form.city.value}/${form.state.value.toUpperCase()}`;
-  html+=`<div class="review-line"><div><strong>Entrega</strong><small>${delivery}</small></div></div><div class="review-line review-total"><span>Total dos produtos</span><strong>${money(total)}</strong></div><p class="freight-note">Frete: a confirmar antes do pagamento.</p>`;
+  html+=`<div class="review-line"><div><strong>Entrega</strong><small>${delivery}</small></div></div><div class="review-line review-total"><span>Total dos produtos</span><strong>${money(total)}</strong></div><p class="freight-note">Entrega: frete calculado após o envio do pedido antes do pagamento.</p>`;
   byId('orderReview').innerHTML=html;
 }
 
 function buildWhatsAppMessage(){
   const f=byId('checkoutForm');
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const isPickup=f.delivery.value==='retirada';
+
   const lines=[
     '☕ *NOVO PEDIDO — CAFÉ RAFA PALMA*',
     '',
@@ -243,16 +245,29 @@ function buildWhatsAppMessage(){
 
   lines.push(
     '────────────────────',
-    '💰 *RESUMO DO PEDIDO*',
-    `Subtotal dos produtos: ${money(total)}`,
-    'Frete: a confirmar',
-    `Total do pedido: ${money(total)} + frete`,
+    '💰 *VALORES*',
+    `Produtos: ${money(total)}`
+  );
+
+  if(isPickup){
+    lines.push(
+      'Retirada: sem frete',
+      `Total: ${money(total)}`
+    );
+  } else {
+    lines.push(
+      `Frete: calcular para CEP ${f.cep.value}`,
+      'Pedido aguardando cálculo do frete e confirmação do cliente.'
+    );
+  }
+
+  lines.push(
     '',
     '────────────────────',
     '📍 *ENTREGA*'
   );
 
-  if(f.delivery.value==='retirada'){
+  if(isPickup){
     lines.push('Tipo de entrega: Retirada');
   } else {
     lines.push(
