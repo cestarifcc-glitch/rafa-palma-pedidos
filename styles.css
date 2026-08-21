@@ -41,3 +41,178 @@ button,a{touch-action:manipulation}
 .field-hint.error{color:#a5332b}
 .field-hint.success{color:var(--green)}
 .field input[readonly]{background:#f7f3ed;color:var(--muted)}
+
+
+/* V4 — identidade visual Rafa Palma */
+:root{
+  --rp-bg:#E8D8C8;
+  --rp-paper:#FBF7F2;
+  --rp-dark:#151515;
+  --rp-dark-2:#171310;
+  --rp-rust:#954430;
+  --rp-rust-dark:#6F321F;
+  --rp-cream:#F1E6D8;
+  --rp-muted:#624F41;
+  --rp-line:#D8C8BA;
+}
+
+html,body{background:var(--rp-paper);color:var(--rp-dark)}
+body{font-family:Arial,Helvetica,sans-serif}
+.site-header,.topbar,header{
+  background:var(--rp-dark-2)!important;
+  color:var(--rp-cream)!important;
+}
+.brand{display:flex;align-items:center;min-width:150px}
+.brand img{
+  display:block;
+  width:148px;
+  height:auto;
+  max-height:82px;
+  object-fit:contain;
+  object-position:left center;
+}
+.hero{
+  background:
+    radial-gradient(circle at 82% 22%,rgba(149,68,48,.13),transparent 26%),
+    linear-gradient(135deg,#fbf7f2 0%,#f1e6d8 100%)!important;
+  border-bottom:1px solid var(--rp-line);
+}
+.hero .eyebrow,.section-kicker,.eyebrow{
+  color:var(--rp-rust)!important;
+  letter-spacing:.15em;
+  font-size:.75rem;
+  font-weight:800;
+}
+.hero h1{
+  color:var(--rp-dark)!important;
+  font-size:clamp(2.65rem,7vw,5.6rem);
+  line-height:.94;
+  letter-spacing:-.055em;
+  max-width:900px;
+}
+.hero-copy{
+  color:#332a25!important;
+  font-size:clamp(1rem,2vw,1.25rem);
+  max-width:720px;
+}
+.hero-script{
+  margin-top:.45rem;
+  color:var(--rp-rust)!important;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(1.35rem,3vw,2.15rem);
+  font-style:italic;
+}
+.btn-primary,.primary,.checkout-actions .primary{
+  background:var(--rp-rust)!important;
+  color:#fff!important;
+  border-color:var(--rp-rust)!important;
+  box-shadow:none!important;
+}
+.btn-primary:hover,.primary:hover{background:var(--rp-rust-dark)!important}
+.btn-secondary,.secondary{
+  background:transparent!important;
+  color:var(--rp-rust-dark)!important;
+  border-color:var(--rp-rust)!important;
+}
+.trust-strip{
+  max-width:1180px;
+  margin:-22px auto 38px;
+  padding:0 22px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  position:relative;
+  z-index:3;
+}
+.trust-strip>div{
+  background:var(--rp-dark-2);
+  color:var(--rp-cream);
+  padding:20px 22px;
+  border-right:1px solid rgba(241,230,216,.16);
+}
+.trust-strip>div:first-child{border-radius:18px 0 0 18px}
+.trust-strip>div:last-child{border-radius:0 18px 18px 0;border-right:0}
+.trust-strip strong{display:block;font-size:.96rem}
+.trust-strip span{display:block;margin-top:4px;color:#bda99a;font-size:.78rem;line-height:1.35}
+
+.product-card,.card,.cart-panel,.checkout-card{
+  background:#fffdfa!important;
+  border:1px solid var(--rp-line)!important;
+  box-shadow:0 12px 32px rgba(23,19,16,.06)!important;
+}
+.product-card{
+  border-radius:22px!important;
+  overflow:hidden;
+}
+.product-card h3{color:var(--rp-dark)!important}
+.price,.product-price{color:var(--rp-rust-dark)!important}
+.product-image,.product-media{
+  background:
+    linear-gradient(135deg,rgba(149,68,48,.10),rgba(241,230,216,.8)),
+    #f4ede5!important;
+}
+.product-image::after,.product-media::after{
+  content:"RAFA PALMA";
+  font-family:Georgia,'Times New Roman',serif;
+  letter-spacing:.08em;
+  color:rgba(111,50,31,.22);
+  font-weight:700;
+}
+.choice,.option-chip,.pill{
+  border-color:#d8c8ba!important;
+  background:#fffdfa!important;
+}
+.choice.active,.option-chip.active,.pill.active{
+  border-color:var(--rp-rust)!important;
+  background:#f3e7da!important;
+  color:var(--rp-rust-dark)!important;
+}
+
+.drawer,.cart-drawer{
+  background:#fffdfa!important;
+}
+.cart-total,.total-line strong{color:var(--rp-rust-dark)!important}
+.checkout-step-indicator .active,.step.active{
+  background:var(--rp-rust)!important;
+  border-color:var(--rp-rust)!important;
+}
+.field input,.field textarea,.field select,
+input,textarea,select{
+  border-color:#d8c8ba;
+  background:#fffdfa;
+}
+.field input:focus,.field textarea:focus,.field select:focus,
+input:focus,textarea:focus,select:focus{
+  border-color:var(--rp-rust)!important;
+  box-shadow:0 0 0 3px rgba(149,68,48,.12)!important;
+  outline:none!important;
+}
+footer,.site-footer{
+  background:var(--rp-dark-2)!important;
+  color:var(--rp-cream)!important;
+}
+
+@media(max-width:760px){
+  .brand img{width:118px;max-height:66px}
+  .hero{padding-top:42px!important}
+  .hero h1{font-size:clamp(2.4rem,11vw,3.6rem);line-height:.96}
+  .hero-copy{font-size:1rem}
+  .hero-script{font-size:1.35rem}
+  .trust-strip{
+    grid-template-columns:1fr;
+    margin:-10px auto 26px;
+    padding:0 16px;
+  }
+  .trust-strip>div{
+    border-right:0;
+    border-bottom:1px solid rgba(241,230,216,.13);
+    padding:16px 18px;
+  }
+  .trust-strip>div:first-child{border-radius:16px 16px 0 0}
+  .trust-strip>div:last-child{border-radius:0 0 16px 16px;border-bottom:0}
+}
+
+/* preserva a paleta clara oficial mesmo com aparelho em modo escuro */
+:root{color-scheme:only light}
+@media(prefers-color-scheme:dark){
+  html,body,input,select,textarea,button{color-scheme:light!important}
+}
