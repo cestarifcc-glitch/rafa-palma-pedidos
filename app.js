@@ -81,11 +81,123 @@ function openCheckout(){if(!state.cart.length)return;closeCart();byId('checkoutM
 function closeCheckout(){byId('checkoutModal').classList.remove('open');byId('checkoutModal').setAttribute('aria-hidden','true')}
 function goStep(step){state.checkoutStep=step;document.querySelectorAll('.checkout-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===step));document.querySelectorAll('[data-step-dot]').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepDot)<=step));byId('checkoutTitle').textContent=step===1?'Seus dados':step===2?'Entrega':'Resumo do seu pedido';if(step===3)renderReview()}
 
+
+const onlyDigits = value => (value || '').replace(/\D/g,'');
+
+function formatCPF(value){
+  const d=onlyDigits(value).slice(0,11);
+  return d.replace(/(\d{3})(\d)/,'$1.$2')
+          .replace(/(\d{3})(\d)/,'$1.$2')
+          .replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+}
+
+function formatPhone(value){
+  const d=onlyDigits(value).slice(0,11);
+  if(d.length<=10){
+    return d.replace(/(\d{2})(\d)/,'($1) $2')
+            .replace(/(\d{4})(\d)/,'$1-$2');
+  }
+  return d.replace(/(\d{2})(\d)/,'($1) $2')
+          .replace(/(\d{5})(\d)/,'$1-$2');
+}
+
+function formatCEP(value){
+  const d=onlyDigits(value).slice(0,8);
+  return d.replace(/(\d{5})(\d)/,'$1-$2');
+}
+
+function isValidCPF(value){
+  const cpf=onlyDigits(value);
+  if(cpf.length!==11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  const calc = size => {
+    let sum=0;
+    for(let i=0;i<size;i++) sum += Number(cpf[i]) * (size+1-i);
+    const r=(sum*10)%11;
+    return r===10 ? 0 : r;
+  };
+  return calc(9)===Number(cpf[9]) && calc(10)===Number(cpf[10]);
+}
+
+function setCepStatus(message, type='hint'){
+  const el=byId('cepStatus');
+  if(!el) return;
+  el.textContent=message;
+  el.classList.remove('error','success');
+  if(type==='error') el.classList.add('error');
+  if(type==='success') el.classList.add('success');
+}
+
+async function lookupCEP(){
+  const form=byId('checkoutForm');
+  const cep=onlyDigits(form.cep.value);
+  if(cep.length!==8){
+    setCepStatus('Informe os 8 números do CEP.','error');
+    return;
+  }
+  setCepStatus('Buscando endereço...');
+  try{
+    const response=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    if(!response.ok) throw new Error('Falha na consulta');
+    const data=await response.json();
+    if(data.erro) throw new Error('CEP não encontrado');
+    form.street.value=data.logradouro || '';
+    form.district.value=data.bairro || '';
+    form.city.value=data.localidade || '';
+    form.state.value=(data.uf || '').toUpperCase();
+    setCepStatus('Endereço encontrado. Confira e informe o número.','success');
+    if(form.street.value) form.number.focus();
+  }catch{
+    setCepStatus('Não conseguimos localizar esse CEP. Preencha o endereço manualmente.','error');
+  }
+}
+
+function setupFormUX(){
+  const form=byId('checkoutForm');
+  form.cpf.addEventListener('input',e=>e.target.value=formatCPF(e.target.value));
+  form.phone.addEventListener('input',e=>e.target.value=formatPhone(e.target.value));
+  form.cep.addEventListener('input',e=>{
+    e.target.value=formatCEP(e.target.value);
+    const digits=onlyDigits(e.target.value);
+    if(digits.length<8) setCepStatus('Ao informar o CEP, buscamos o endereço automaticamente.');
+    if(digits.length===8) lookupCEP();
+  });
+  form.state.addEventListener('input',e=>e.target.value=e.target.value.replace(/[^a-zA-Z]/g,'').slice(0,2).toUpperCase());
+  form.querySelectorAll('input,textarea').forEach(input=>{
+    input.addEventListener('input',()=>input.closest('.field')?.classList.remove('invalid'));
+  });
+}
+
 function validateStep(step){
-  const pane=document.querySelector(`.checkout-step[data-step="${step}"]`); let ok=true;
-  pane.querySelectorAll('[required]').forEach(input=>{const field=input.closest('.field');const valid=input.value.trim() && (input.type!=='email'||input.validity.valid);field?.classList.toggle('invalid',!valid);if(!valid)ok=false});
-  if(step===2 && byId('checkoutForm').delivery.value==='envio'){
-    ['cep','street','number','district','city','state'].forEach(name=>{const input=byId('checkoutForm').elements[name];const valid=input.value.trim();input.closest('.field')?.classList.toggle('invalid',!valid);if(!valid)ok=false})
+  const form=byId('checkoutForm');
+  const pane=document.querySelector(`.checkout-step[data-step="${step}"]`);
+  let ok=true;
+
+  pane.querySelectorAll('[required]').forEach(input=>{
+    const field=input.closest('.field');
+    let valid=Boolean(input.value.trim());
+
+    if(input.type==='email' && input.value.trim()) valid=input.validity.valid;
+    if(input.name==='cpf') valid=isValidCPF(input.value);
+    if(input.name==='phone') valid=onlyDigits(input.value).length>=10;
+
+    field?.classList.toggle('invalid',!valid);
+    if(!valid) ok=false;
+  });
+
+  if(step===2 && form.delivery.value==='envio'){
+    ['cep','street','number','district','city','state'].forEach(name=>{
+      const input=form.elements[name];
+      let valid=Boolean(input.value.trim());
+      if(name==='cep') valid=onlyDigits(input.value).length===8;
+      if(name==='state') valid=input.value.trim().length===2;
+      input.closest('.field')?.classList.toggle('invalid',!valid);
+      if(!valid) ok=false;
+    });
+  }
+
+  if(!ok){
+    const firstInvalid=pane.querySelector('.field.invalid input, .field.invalid textarea');
+    firstInvalid?.focus();
   }
   return ok;
 }
@@ -172,4 +284,4 @@ document.querySelectorAll('[data-next]').forEach(btn=>btn.addEventListener('clic
 byId('checkoutForm').addEventListener('change',e=>{if(e.target.name==='delivery')byId('addressFields').classList.toggle('hidden',e.target.value!=='envio')});
 byId('checkoutForm').addEventListener('submit',e=>{e.preventDefault();if(!validateStep(1)||!validateStep(2))return;const msg=encodeURIComponent(buildWhatsAppMessage());window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`,'_blank','noopener,noreferrer')});
 
-renderProducts();renderCart();
+setupFormUX();renderProducts();renderCart();

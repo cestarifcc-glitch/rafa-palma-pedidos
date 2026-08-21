@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#171512" />
-  <title>Comprar Café Rafa Palma | Torra Próia</title>
+  <title>Comprar Café Rafa Palma | Torra Própria</title>
   <meta name="description" content="Compre Café Rafa Palma em grãos ou moído. Torra própria e envio para todo o Brasil." />
   <meta property="og:title" content="Comprar Café Rafa Palma | Torra Própria" />
   <meta property="og:description" content="Torra própria, em grãos ou moído, envio para todo o Brasil." />
@@ -103,8 +103,8 @@
         <div class="checkout-step active" data-step="1">
           <div class="field-grid">
             <label class="field field-wide">Nome completo<input name="name" autocomplete="name" required /></label>
-            <label class="field">CPF<input name="cpf" inputmode="numeric" autocomplete="off" required /></label>
-            <label class="field">WhatsApp<input name="phone" inputmode="tel" autocomplete="tel" required /></label>
+            <label class="field">CPF<input name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" required /><small class="field-error">Informe um CPF válido.</small></label>
+            <label class="field">WhatsApp<input name="phone" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="(55) 99999-9999" required /><small class="field-error">Informe o WhatsApp com DDD.</small></label>
             <label class="field field-wide">E-mail<input name="email" type="email" autocomplete="email" required /></label>
           </div>
           <div class="step-actions"><button class="btn btn-primary" type="button" data-next="2">Continuar</button></div>
@@ -117,13 +117,13 @@
             <label class="choice-card"><input type="radio" name="delivery" value="envio" /><span><strong>Receber</strong><small>Informe seu endereço para envio.</small></span></label>
           </fieldset>
           <div id="addressFields" class="field-grid hidden">
-            <label class="field">CEP<input name="cep" inputmode="numeric" autocomplete="postal-code" /></label>
+            <label class="field">CEP<input name="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" /><small id="cepStatus" class="field-hint">Ao informar o CEP, buscamos o endereço automaticamente.</small></label>
             <label class="field">Número<input name="number" autocomplete="address-line2" /></label>
             <label class="field field-wide">Rua<input name="street" autocomplete="address-line1" /></label>
             <label class="field">Complemento<input name="complement" autocomplete="address-line2" /></label>
             <label class="field">Bairro<input name="district" /></label>
             <label class="field">Cidade<input name="city" autocomplete="address-level2" /></label>
-            <label class="field">Estado<input name="state" maxlength="2" autocomplete="address-level1" /></label>
+            <label class="field">Estado<input name="state" maxlength="2" autocomplete="address-level1" placeholder="RS" /></label>
             <p class="field-wide form-note">O valor do frete será confirmado pela Rafa Palma antes do pagamento.</p>
           </div>
           <div class="step-actions split"><button class="btn btn-secondary" type="button" data-back="1">Voltar</button><button class="btn btn-primary" type="button" data-next="3">Revisar pedido</button></div>

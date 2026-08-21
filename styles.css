@@ -32,3 +32,12 @@ button,a{touch-action:manipulation}
 .footer{display:flex;justify-content:space-between;gap:20px;align-items:end;padding:34px clamp(20px,7vw,110px);border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}.footer strong,.footer span{display:block}.footer strong{color:var(--ink);letter-spacing:.08em}.footer p{margin:0}
 @media (max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-panel{grid-template-columns:repeat(3,1fr)}.hero-panel div{border-bottom:0;border-right:1px solid rgba(255,255,255,.14);padding:0 14px 0 0}.hero-panel div:last-child{border-right:0}.products-grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:620px){.topbar{padding:10px 14px}.brand-mark{width:38px;height:38px}.brand-text small{display:none}.cart-button{font-size:.78rem;padding:8px 10px}.hero{padding:58px 18px 42px;gap:28px}.hero h1{font-size:clamp(2.65rem,14vw,4.3rem)}.hero-subtitle{margin:18px 0 22px}.hero-actions{align-items:flex-start;flex-direction:column}.hero-panel{grid-template-columns:1fr;gap:0;padding:20px}.hero-panel div{border-right:0;border-bottom:1px solid rgba(255,255,255,.14);padding:13px 0}.hero-panel div:first-child{padding-top:0}.section{padding:64px 18px}.products-grid{grid-template-columns:1fr}.product-visual{aspect-ratio:16/10}.product-body{padding:18px}.steps{grid-template-columns:1fr}.field-grid{grid-template-columns:1fr}.field-wide{grid-column:auto}.checkout-modal{padding:0}.checkout-shell{min-height:100dvh;border-radius:0}.checkout-step{padding:22px 18px}.checkout-top{padding:18px}.progress{padding:16px 20px 0}.step-actions.split{flex-direction:column-reverse}.step-actions .btn{width:100%}.footer{flex-direction:column;align-items:flex-start}.cart-drawer{width:100vw}.product-actions{grid-template-columns:92px 1fr}}
+
+
+/* V3 — experiência de preenchimento */
+.field-error{display:none;font-size:.72rem;font-weight:600;color:#a5332b;margin-top:-2px}
+.field.invalid .field-error{display:block}
+.field-hint{font-size:.7rem;font-weight:500;color:var(--muted);line-height:1.35}
+.field-hint.error{color:#a5332b}
+.field-hint.success{color:var(--green)}
+.field input[readonly]{background:#f7f3ed;color:var(--muted)}
