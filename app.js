@@ -100,12 +100,70 @@ function renderReview(){
 }
 
 function buildWhatsAppMessage(){
-  const f=byId('checkoutForm'); const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const lines=['*NOVO PEDIDO — CAFÉ RAFA PALMA*','',`Cliente: ${f.name.value}`,'','*PEDIDO*',''];
-  state.cart.forEach(i=>{lines.push(`${i.qty} × Café ${i.name} ${i.grams} g`,i.type==='graos'?'Em grãos':`Moído · Método: ${i.method}`,`${money(i.qty*i.price)}`,'')});
-  lines.push(`*Subtotal:* ${money(total)}`,'*Frete:* a confirmar',`*Total dos produtos:* ${money(total)}`,'','*ENTREGA*','',`Nome: ${f.name.value}`,`CPF: ${f.cpf.value}`,`WhatsApp: ${f.phone.value}`,`E-mail: ${f.email.value}`);
-  if(f.delivery.value==='retirada') lines.push('Modalidade: Retirada'); else lines.push(`CEP: ${f.cep.value}`,`Endereço: ${f.street.value}, ${f.number.value}${f.complement.value?` · ${f.complement.value}`:''}`,`Bairro: ${f.district.value}`,`Cidade/UF: ${f.city.value}/${f.state.value.toUpperCase()}`);
-  if(f.notes.value.trim()) lines.push('',`Observações: ${f.notes.value.trim()}`);
+  const f=byId('checkoutForm');
+  const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const lines=[
+    '☕ *NOVO PEDIDO — CAFÉ RAFA PALMA*',
+    '',
+    '👤 *CLIENTE*',
+    `Nome: ${f.name.value}`,
+    `CPF: ${f.cpf.value}`,
+    `WhatsApp: ${f.phone.value}`,
+    `E-mail: ${f.email.value}`,
+    '',
+    '────────────────────',
+    '☕ *PEDIDO*',
+    ''
+  ];
+
+  state.cart.forEach((i,index)=>{
+    const itemSubtotal=i.qty*i.price;
+    lines.push(
+      `*${index+1}. Café ${i.name} — ${i.grams} g*`,
+      `Tipo: ${i.type==='graos'?'Em grãos':'Moído'}`,
+      ...(i.type==='moido' ? [`Método: ${i.method}`] : []),
+      `Quantidade: ${i.qty}`,
+      `Valor unitário: ${money(i.price)}`,
+      `Subtotal: ${money(itemSubtotal)}`,
+      ''
+    );
+  });
+
+  lines.push(
+    '────────────────────',
+    '💰 *RESUMO DO PEDIDO*',
+    `Subtotal dos produtos: ${money(total)}`,
+    'Frete: a confirmar',
+    `Total do pedido: ${money(total)} + frete`,
+    '',
+    '────────────────────',
+    '📍 *ENTREGA*'
+  );
+
+  if(f.delivery.value==='retirada'){
+    lines.push('Tipo de entrega: Retirada');
+  } else {
+    lines.push(
+      'Tipo de entrega: Envio',
+      `CEP: ${f.cep.value}`,
+      `Endereço: ${f.street.value}, ${f.number.value}`,
+      `Complemento: ${f.complement.value || '—'}`,
+      `Bairro: ${f.district.value}`,
+      `Cidade/UF: ${f.city.value}/${f.state.value.toUpperCase()}`
+    );
+  }
+
+  if(f.notes.value.trim()){
+    lines.push('', '📝 *OBSERVAÇÕES*', f.notes.value.trim());
+  }
+
+  lines.push(
+    '',
+    '────────────────────',
+    '📦 Pedido realizado pelo site Café Rafa Palma',
+    'Obrigado pela preferência! ☕'
+  );
+
   return lines.join('\n');
 }
 
