@@ -124,7 +124,7 @@ function openCart(){byId('cartDrawer').classList.add('open');byId('cartDrawer').
 function closeCart(){byId('cartDrawer').classList.remove('open');byId('cartDrawer').setAttribute('aria-hidden','true');byId('overlay').hidden=true}
 function openCheckout(){if(!state.cart.length)return;closeCart();byId('checkoutModal').classList.add('open');byId('checkoutModal').setAttribute('aria-hidden','false');goStep(1)}
 function closeCheckout(){byId('checkoutModal').classList.remove('open');byId('checkoutModal').setAttribute('aria-hidden','true')}
-function goStep(step){state.checkoutStep=step;document.querySelectorAll('.checkout-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===step));document.querySelectorAll('[data-step-dot]').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepDot)<=step));byId('checkoutTitle').textContent=step===1?'Seus dados':step===2?'Entrega':'Resumo do seu pedido';if(step===3)renderReview()}
+function goStep(step){state.checkoutStep=step;document.querySelectorAll('.checkout-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===step));document.querySelectorAll('[data-step-dot]').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepDot)<=step));byId('checkoutTitle').textContent=step===1?'Seus dados':step===2?'Entrega':'Resumo do seu pedido';if(step===3){saveRememberedCustomerData();renderReview()}}
 
 
 const onlyDigits = value => (value || '').replace(/\D/g,'');
@@ -196,8 +196,67 @@ async function lookupCEP(){
   }
 }
 
+
+const CUSTOMER_STORAGE_KEY='rafaPalmaCustomerDataV1';
+
+function getRememberedCustomerData(){
+  try{
+    return JSON.parse(localStorage.getItem(CUSTOMER_STORAGE_KEY) || 'null');
+  }catch{
+    return null;
+  }
+}
+
+function saveRememberedCustomerData(){
+  const form=byId('checkoutForm');
+  if(!form?.rememberData?.checked) return;
+  const data={
+    name:form.name.value,
+    cpf:form.cpf.value,
+    phone:form.phone.value,
+    email:form.email.value,
+    delivery:form.delivery.value,
+    cep:form.cep.value,
+    street:form.street.value,
+    number:form.number.value,
+    complement:form.complement.value,
+    district:form.district.value,
+    city:form.city.value,
+    state:form.state.value
+  };
+  try{
+    localStorage.setItem(CUSTOMER_STORAGE_KEY,JSON.stringify(data));
+  }catch{}
+}
+
+function clearRememberedCustomerData(){
+  try{localStorage.removeItem(CUSTOMER_STORAGE_KEY)}catch{}
+}
+
+function restoreRememberedCustomerData(){
+  const form=byId('checkoutForm');
+  if(!form) return;
+  const data=getRememberedCustomerData();
+  if(!data) return;
+
+  ['name','cpf','phone','email','cep','street','number','complement','district','city','state'].forEach(name=>{
+    if(form.elements[name] && data[name] !== undefined) form.elements[name].value=data[name] || '';
+  });
+
+  if(form.rememberData) form.rememberData.checked=true;
+
+  if(data.delivery){
+    const deliveryInput=form.querySelector(`input[name="delivery"][value="${data.delivery}"]`);
+    if(deliveryInput){
+      deliveryInput.checked=true;
+      deliveryInput.dispatchEvent(new Event('change',{bubbles:true}));
+    }
+  }
+}
+
 function setupFormUX(){
   const form=byId('checkoutForm');
+  restoreRememberedCustomerData();
   form.cpf.addEventListener('input',e=>e.target.value=formatCPF(e.target.value));
   form.phone.addEventListener('input',e=>e.target.value=formatPhone(e.target.value));
   form.cep.addEventListener('input',e=>{
@@ -209,6 +268,10 @@ function setupFormUX(){
   form.state.addEventListener('input',e=>e.target.value=e.target.value.replace(/[^a-zA-Z]/g,'').slice(0,2).toUpperCase());
   form.querySelectorAll('input,textarea').forEach(input=>{
     input.addEventListener('input',()=>input.closest('.field')?.classList.remove('invalid'));
+  });
+
+  form.rememberData?.addEventListener('change',()=>{
+    if(!form.rememberData.checked) clearRememberedCustomerData();
   });
 }
 
@@ -257,6 +320,7 @@ function renderReview(){
 }
 
 function buildWhatsAppMessage(){
+  saveRememberedCustomerData();
   const f=byId('checkoutForm');
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
   const isPickup=f.delivery.value==='retirada';
