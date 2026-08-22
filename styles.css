@@ -956,3 +956,38 @@ section.how-section .steps h3{
     padding-top:18px!important;
   }
 }
+
+
+/* V19 — orientação para moagem quando o cliente não sabe o método */
+.guidance-wrap{margin-top:12px}
+.guidance-input{
+  width:100%;
+  resize:vertical;
+  min-height:78px;
+  border:1px solid #d8c8ba;
+  border-radius:12px;
+  padding:12px 13px;
+  background:#fffdfa;
+  color:#171310;
+  font:inherit;
+  line-height:1.4;
+}
+.guidance-input:focus{
+  outline:none;
+  border-color:#954430;
+  box-shadow:0 0 0 3px rgba(149,68,48,.12);
+}
+.guidance-input.needs-attention{
+  border-color:#954430!important;
+  box-shadow:0 0 0 3px rgba(149,68,48,.14)!important;
+}
+.guidance-help{
+  margin:6px 0 0;
+  font-size:.72rem;
+  line-height:1.4;
+  color:#624f41;
+}
+.cart-guidance{
+  display:inline-block;
+  margin-top:4px;
+}

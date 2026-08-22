@@ -22,7 +22,7 @@ function productCard(product){
       <p class="product-desc">${product.description}</p>
       <span class="control-label">Tamanho</span><div class="segmented">${sizeButtons}</div>
       <span class="control-label">Como você prefere?</span><div class="segmented">${typeButtons}</div>
-      ${product.ground ? `<div class="method-wrap hidden"><label class="control-label">Como você prepara seu café?</label><select class="method-select">${methods}</select><p class="helper hidden">Não se preocupe. Vamos indicar a moagem adequada para você.</p></div>`:''}
+      ${product.ground ? `<div class="method-wrap hidden"><label class="control-label">Como você prepara seu café?</label><select class="method-select">${methods}</select><p class="helper hidden">Não se preocupe. Vamos indicar a moagem adequada para você.</p><div class="guidance-wrap hidden"><label class="control-label">Conte como você prepara seu café</label><textarea class="guidance-input" rows="2" placeholder="Ex.: uso coador de pano, cafeteira elétrica, filtro de papel..."></textarea><p class="guidance-help">Essa informação ajuda a Rafa Palma a indicar a moagem adequada.</p></div></div>`:''}
       <div class="product-actions"><div class="quantity-row"><select class="qty-select" aria-label="Quantidade">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}">${n} un.</option>`).join('')}</select></div><button class="btn btn-primary add-btn" type="button">Adicionar</button></div>
     </div>
   </article>`;
@@ -47,9 +47,17 @@ function renderProducts(){
       card.dataset.selectedType=btn.dataset.type;
       const wrap=card.querySelector('.method-wrap'); if(wrap) wrap.classList.toggle('hidden',btn.dataset.type!=='moido');
     }));
-    const method=card.querySelector('.method-select'); if(method) method.addEventListener('change',()=>{ method.classList.remove('needs-attention');
-      card.querySelector('.helper').classList.toggle('hidden',method.value!=='Não sei qual escolher');
+    const method=card.querySelector('.method-select'); if(method) method.addEventListener('change',()=>{ 
+      method.classList.remove('needs-attention');
+      const needsGuidance=method.value==='Não sei qual escolher';
+      card.querySelector('.helper').classList.toggle('hidden',!needsGuidance);
+      card.querySelector('.guidance-wrap')?.classList.toggle('hidden',!needsGuidance);
+      if(!needsGuidance){
+        const guidance=card.querySelector('.guidance-input');
+        if(guidance) guidance.value='';
+      }
     });
+    card.querySelector('.guidance-input')?.addEventListener('input',e=>e.target.classList.remove('needs-attention'));
     card.querySelector('.add-btn').addEventListener('click',()=>addFromCard(card));
   });
 }
@@ -65,10 +73,18 @@ function addFromCard(card){
     alert('Precisamos saber como você prepara seu café para fazermos a moagem adequada.');
     return;
   }
+  const guidance=type==='moido' && method==='Não sei qual escolher' ? (card.querySelector('.guidance-input')?.value || '').trim() : '';
+  if(type==='moido' && method==='Não sei qual escolher' && !guidance){
+    const field=card.querySelector('.guidance-input');
+    field?.classList.add('needs-attention');
+    field?.focus();
+    alert('Conte rapidamente como você prepara seu café para podermos indicar a moagem adequada.');
+    return;
+  }
   const qty=Number(card.querySelector('.qty-select').value);
-  const key=[product.id,card.dataset.selectedGrams,type,method].join('|');
+  const key=[product.id,card.dataset.selectedGrams,type,method,guidance].join('|');
   const existing=state.cart.find(i=>i.key===key);
-  if(existing) existing.qty+=qty; else state.cart.push({key,productId:product.id,name:product.name,grams:Number(card.dataset.selectedGrams),price:Number(card.dataset.selectedPrice),type,method,qty});
+  if(existing) existing.qty+=qty; else state.cart.push({key,productId:product.id,name:product.name,grams:Number(card.dataset.selectedGrams),price:Number(card.dataset.selectedPrice),type,method,guidance,qty});
   renderCart();
   const addBtn=card.querySelector('.add-btn');
   const originalText='Adicionar';
@@ -93,7 +109,7 @@ function renderCart(){
   }
   if(!state.cart.length){items.innerHTML='';empty.classList.remove('hidden');footer.classList.add('hidden');return;}
   empty.classList.add('hidden');footer.classList.remove('hidden');
-  items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
+  items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}${i.guidance?`<br><span class="cart-guidance">Como prepara: ${i.guidance}</span>`:''}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0); byId('cartTotal').textContent=money(total);
   items.querySelectorAll('button[data-action]').forEach(btn=>btn.addEventListener('click',()=>{
     const idx=Number(btn.dataset.index), action=btn.dataset.action;
@@ -234,7 +250,7 @@ function validateStep(step){
 function renderReview(){
   const form=byId('checkoutForm'); const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
   let html=`<div class="review-line"><div><strong>${form.name.value}</strong><small>${form.phone.value} · ${form.email.value}</small></div></div>`;
-  html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
+  html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}${i.guidance?`<br>Como prepara: ${i.guidance}`:''}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
   const delivery=form.delivery.value==='retirada'?'Retirada':`${form.street.value}, ${form.number.value} · ${form.district.value} · ${form.city.value}/${form.state.value.toUpperCase()}`;
   html+=`<div class="review-line"><div><strong>Entrega</strong><small>${delivery}</small></div></div><div class="review-line review-total"><span>Total dos produtos</span><strong>${money(total)}</strong></div><p class="freight-note">Entrega: frete calculado após o envio do pedido antes do pagamento.</p>`;
   byId('orderReview').innerHTML=html;
@@ -264,7 +280,10 @@ function buildWhatsAppMessage(){
     lines.push(
       `*${index+1}. Café ${i.name} — ${i.grams} g*`,
       `Tipo: ${i.type==='graos'?'Em grãos':'Moído'}`,
-      ...(i.type==='moido' ? [`Método: ${methodOrderLabel(i.method)}`] : []),
+      ...(i.type==='moido' ? [
+        `Método: ${methodOrderLabel(i.method)}`,
+        ...(i.guidance ? [`Como prepara: ${i.guidance}`] : [])
+      ] : []),
       `Quantidade: ${i.qty}`,
       `Valor unitário: ${money(i.price)}`,
       `Subtotal: ${money(itemSubtotal)}`,
