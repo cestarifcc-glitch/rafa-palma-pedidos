@@ -753,3 +753,82 @@ section.how-section .steps h3{
     padding-bottom:28px!important;
   }
 }
+
+
+/* V16 — refinamento EXCLUSIVAMENTE MOBILE
+   Desktop V15 preservado integralmente */
+@media (max-width: 620px){
+
+  /* Hero: preservar tipografia, apenas compactar respiros */
+  .hero{
+    padding-top:28px!important;
+    padding-bottom:26px!important;
+  }
+
+  /* Quadro escuro do hero */
+  .hero-panel,
+  .hero-card{
+    padding-top:20px!important;
+    padding-bottom:20px!important;
+  }
+  .hero-panel > *,
+  .hero-card > *{
+    margin-top:0;
+  }
+
+  /* Faixa de diferenciais: menos altura vertical */
+  .trust-strip{
+    margin-top:18px!important;
+  }
+  .trust-strip > div,
+  .trust-strip article{
+    padding-top:14px!important;
+    padding-bottom:14px!important;
+  }
+
+  /* Produtos: preservar cards, reduzir somente respiros da seção */
+  #cafes,
+  .products-section{
+    padding-top:22px!important;
+    padding-bottom:28px!important;
+  }
+
+  /* Seção "Simples do início ao fim" */
+  section.how-section.section{
+    padding-top:24px!important;
+    padding-bottom:24px!important;
+  }
+
+  section.how-section .section-heading.compact{
+    margin-bottom:16px!important;
+  }
+
+  section.how-section .steps{
+    gap:10px!important;
+  }
+
+  section.how-section .steps article{
+    padding:15px 17px!important;
+    min-height:0!important;
+  }
+
+  section.how-section .steps article .step-number,
+  section.how-section .steps article .number{
+    margin-bottom:7px!important;
+  }
+
+  section.how-section .steps h3{
+    margin-top:8px!important;
+    margin-bottom:5px!important;
+  }
+
+  section.how-section .steps p{
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+
+  /* Rodapé: espaço suficiente para a barra flutuante do pedido */
+  .site-footer{
+    padding-bottom:92px!important;
+  }
+}
