@@ -23,7 +23,7 @@ function productCard(product){
       <span class="control-label">Tamanho</span><div class="segmented">${sizeButtons}</div>
       <span class="control-label">Como você prefere?</span><div class="segmented">${typeButtons}</div>
       ${product.ground ? `<div class="method-wrap hidden"><label class="control-label">Como você prepara seu café?</label><select class="method-select">${methods}</select><p class="helper hidden">Não se preocupe. Vamos indicar a moagem adequada para você.</p></div>`:''}
-      <div class="product-actions"><div class="quantity-row"><select class="qty-select" aria-label="Quantidade">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}">${n} un.</option>`).join('')}</select></div><button class="btn btn-primary add-btn" type="button">Adicionar ao pedido</button></div>
+      <div class="product-actions"><div class="quantity-row"><select class="qty-select" aria-label="Quantidade">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}">${n} un.</option>`).join('')}</select></div><button class="btn btn-primary add-btn" type="button">Adicionar</button></div>
     </div>
   </article>`;
 }
@@ -56,12 +56,28 @@ function addFromCard(card){
   const key=[product.id,card.dataset.selectedGrams,type,method].join('|');
   const existing=state.cart.find(i=>i.key===key);
   if(existing) existing.qty+=qty; else state.cart.push({key,productId:product.id,name:product.name,grams:Number(card.dataset.selectedGrams),price:Number(card.dataset.selectedPrice),type,method,qty});
-  renderCart(); openCart();
+  renderCart();
+  const addBtn=card.querySelector('.add-btn');
+  const originalText='Adicionar';
+  addBtn.textContent=`✓ ${qty} ${qty===1?'adicionado':'adicionados'}`;
+  addBtn.classList.add('added');
+  clearTimeout(addBtn._feedbackTimer);
+  addBtn._feedbackTimer=setTimeout(()=>{
+    addBtn.textContent=originalText;
+    addBtn.classList.remove('added');
+  },1600);
 }
 
 function renderCart(){
   const items=byId('cartItems'), empty=byId('cartEmpty'), footer=byId('cartFooter');
   const count=state.cart.reduce((s,i)=>s+i.qty,0); byId('cartBadge').textContent=count;
+  const quickCart=byId('quickCart');
+  const quickSummary=byId('quickCartSummary');
+  const runningTotal=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
+  if(quickCart && quickSummary){
+    quickSummary.textContent=`${count} ${count===1?'item':'itens'} · ${money(runningTotal)}`;
+    quickCart.classList.toggle('hidden',count===0);
+  }
   if(!state.cart.length){items.innerHTML='';empty.classList.remove('hidden');footer.classList.add('hidden');return;}
   empty.classList.add('hidden');footer.classList.remove('hidden');
   items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${i.method}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
@@ -294,7 +310,8 @@ function buildWhatsAppMessage(){
   return lines.join('\n');
 }
 
-byId('openCartBtn').addEventListener('click',openCart);byId('closeCartBtn').addEventListener('click',closeCart);byId('overlay').addEventListener('click',closeCart);byId('continueShoppingBtn').addEventListener('click',closeCart);byId('continueShoppingEmpty').addEventListener('click',closeCart);byId('checkoutBtn').addEventListener('click',openCheckout);byId('closeCheckoutBtn').addEventListener('click',closeCheckout);
+byId('openCartBtn').addEventListener('click',openCart);
+byId('quickCart')?.addEventListener('click',openCart);byId('closeCartBtn').addEventListener('click',closeCart);byId('overlay').addEventListener('click',closeCart);byId('continueShoppingBtn').addEventListener('click',closeCart);byId('continueShoppingEmpty').addEventListener('click',closeCart);byId('checkoutBtn').addEventListener('click',openCheckout);byId('closeCheckoutBtn').addEventListener('click',closeCheckout);
 document.querySelectorAll('[data-next]').forEach(btn=>btn.addEventListener('click',()=>{const next=Number(btn.dataset.next);if(validateStep(next-1))goStep(next)}));document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>goStep(Number(btn.dataset.back))));
 byId('checkoutForm').addEventListener('change',e=>{if(e.target.name==='delivery')byId('addressFields').classList.toggle('hidden',e.target.value!=='envio')});
 byId('checkoutForm').addEventListener('submit',e=>{e.preventDefault();if(!validateStep(1)||!validateStep(2))return;const msg=encodeURIComponent(buildWhatsAppMessage());window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`,'_blank','noopener,noreferrer')});

@@ -494,3 +494,59 @@ section{
     padding-bottom:20px!important;
   }
 }
+
+
+/* V9 — compra contínua: adiciona sem interromper e resumo fixo */
+.add-btn.added{
+  background:#2f5b43!important;
+  border-color:#2f5b43!important;
+}
+
+.quick-cart{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  z-index:80;
+  width:min(560px,calc(100vw - 32px));
+  min-height:58px;
+  border:0;
+  border-radius:16px;
+  padding:10px 12px 10px 18px;
+  background:#171310;
+  color:#fff;
+  box-shadow:0 16px 40px rgba(0,0,0,.24);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  cursor:pointer;
+  font:inherit;
+}
+.quick-cart.hidden{display:none!important}
+.quick-cart span{
+  font-size:.88rem;
+  font-weight:700;
+  text-align:left;
+}
+.quick-cart strong{
+  background:#954430;
+  border-radius:11px;
+  padding:11px 14px;
+  font-size:.78rem;
+  white-space:nowrap;
+}
+@media(min-width:761px){
+  .quick-cart{bottom:22px}
+}
+@media(max-width:760px){
+  .quick-cart{
+    bottom:10px;
+    width:calc(100vw - 20px);
+    min-height:56px;
+    border-radius:14px;
+    padding-left:14px;
+  }
+  .quick-cart strong{padding:10px 12px}
+  body{padding-bottom:76px}
+}
