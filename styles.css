@@ -931,3 +931,28 @@ section.how-section .steps h3{
     line-height:1.35!important;
   }
 }
+
+
+/* V18 — simplificação exclusiva do mobile
+   Desktop preservado exatamente como está */
+@media (max-width: 620px){
+
+  .hero-panel,
+  .hero-card{
+    display:none!important;
+  }
+
+  .hero{
+    padding-bottom:18px!important;
+  }
+
+  .trust-strip{
+    margin-top:14px!important;
+    margin-bottom:10px!important;
+  }
+
+  #cafes,
+  .products-section{
+    padding-top:18px!important;
+  }
+}
