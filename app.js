@@ -13,7 +13,7 @@ function productCard(product){
     product.beans ? `<button type="button" class="type-btn active" data-type="graos">Em grãos</button>` : '',
     product.ground ? `<button type="button" class="type-btn" data-type="moido">Moído</button>` : ''
   ].join('');
-  const methods = METHODS.map(m=>`<option value="${m}">${m}</option>`).join('');
+  const methods = METHODS.map(m=>m ? `<option value="${m}">${m}</option>` : `<option value="" selected disabled>Selecione seu método</option>`).join('');
   const visual = product.image ? `<img src="${product.image}" alt="Café ${product.name}">` : `<div class="product-placeholder">${product.name}<small>CAFÉ RAFA PALMA</small></div>`;
   return `<article class="product-card" data-product-id="${product.id}" data-selected-grams="${firstSize.grams}" data-selected-price="${firstSize.price}" data-selected-type="${product.beans?'graos':'moido'}">
     <div class="product-visual">${visual}</div>
@@ -26,6 +26,12 @@ function productCard(product){
       <div class="product-actions"><div class="quantity-row"><select class="qty-select" aria-label="Quantidade">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}">${n} un.</option>`).join('')}</select></div><button class="btn btn-primary add-btn" type="button">Adicionar</button></div>
     </div>
   </article>`;
+}
+
+
+function methodOrderLabel(method){
+  if(method==='Não sei qual escolher') return 'Cliente precisa de orientação';
+  return method;
 }
 
 function renderProducts(){
@@ -41,7 +47,7 @@ function renderProducts(){
       card.dataset.selectedType=btn.dataset.type;
       const wrap=card.querySelector('.method-wrap'); if(wrap) wrap.classList.toggle('hidden',btn.dataset.type!=='moido');
     }));
-    const method=card.querySelector('.method-select'); if(method) method.addEventListener('change',()=>{
+    const method=card.querySelector('.method-select'); if(method) method.addEventListener('change',()=>{ method.classList.remove('needs-attention');
       card.querySelector('.helper').classList.toggle('hidden',method.value!=='Não sei qual escolher');
     });
     card.querySelector('.add-btn').addEventListener('click',()=>addFromCard(card));
@@ -52,6 +58,13 @@ function addFromCard(card){
   const product=PRODUCTS.find(p=>p.id===card.dataset.productId);
   const type=card.dataset.selectedType;
   const method=type==='moido' ? card.querySelector('.method-select')?.value || '' : '';
+  if(type==='moido' && !method){
+    const select=card.querySelector('.method-select');
+    select?.classList.add('needs-attention');
+    select?.focus();
+    alert('Precisamos saber como você prepara seu café para fazermos a moagem adequada.');
+    return;
+  }
   const qty=Number(card.querySelector('.qty-select').value);
   const key=[product.id,card.dataset.selectedGrams,type,method].join('|');
   const existing=state.cart.find(i=>i.key===key);
@@ -80,7 +93,7 @@ function renderCart(){
   }
   if(!state.cart.length){items.innerHTML='';empty.classList.remove('hidden');footer.classList.add('hidden');return;}
   empty.classList.add('hidden');footer.classList.remove('hidden');
-  items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${i.method}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
+  items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0); byId('cartTotal').textContent=money(total);
   items.querySelectorAll('button[data-action]').forEach(btn=>btn.addEventListener('click',()=>{
     const idx=Number(btn.dataset.index), action=btn.dataset.action;
@@ -221,7 +234,7 @@ function validateStep(step){
 function renderReview(){
   const form=byId('checkoutForm'); const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
   let html=`<div class="review-line"><div><strong>${form.name.value}</strong><small>${form.phone.value} · ${form.email.value}</small></div></div>`;
-  html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${i.method}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
+  html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
   const delivery=form.delivery.value==='retirada'?'Retirada':`${form.street.value}, ${form.number.value} · ${form.district.value} · ${form.city.value}/${form.state.value.toUpperCase()}`;
   html+=`<div class="review-line"><div><strong>Entrega</strong><small>${delivery}</small></div></div><div class="review-line review-total"><span>Total dos produtos</span><strong>${money(total)}</strong></div><p class="freight-note">Entrega: frete calculado após o envio do pedido antes do pagamento.</p>`;
   byId('orderReview').innerHTML=html;
@@ -251,7 +264,7 @@ function buildWhatsAppMessage(){
     lines.push(
       `*${index+1}. Café ${i.name} — ${i.grams} g*`,
       `Tipo: ${i.type==='graos'?'Em grãos':'Moído'}`,
-      ...(i.type==='moido' ? [`Método: ${i.method}`] : []),
+      ...(i.type==='moido' ? [`Método: ${methodOrderLabel(i.method)}`] : []),
       `Quantidade: ${i.qty}`,
       `Valor unitário: ${money(i.price)}`,
       `Subtotal: ${money(itemSubtotal)}`,

@@ -7,7 +7,9 @@ window.RAFA_PALMA_PRODUCTS = [
     description: 'Café Rafa Palma · torra própria.',
     sizes: [
       { grams: 100, price: 25.00 },
-      { grams: 250, price: 55.00 }
+      { grams: 250, price: 55.00 },
+      { grams: 500, price: 105.00 },
+      { grams: 1000, price: 210.00 }
     ],
     beans: true,
     ground: true,
@@ -19,7 +21,9 @@ window.RAFA_PALMA_PRODUCTS = [
     description: 'Café Rafa Palma · torra própria.',
     sizes: [
       { grams: 100, price: 25.00 },
-      { grams: 250, price: 55.00 }
+      { grams: 250, price: 55.00 },
+      { grams: 500, price: 105.00 },
+      { grams: 1000, price: 210.00 }
     ],
     beans: true,
     ground: true,
@@ -30,21 +34,28 @@ window.RAFA_PALMA_PRODUCTS = [
     name: 'Meu Jeito',
     description: 'Café Rafa Palma · torra própria.',
     sizes: [
-      { grams: 250, price: 85.00 }
+      { grams: 100, price: 34.00 },
+      { grams: 250, price: 85.00 },
+      { grams: 500, price: 150.00 },
+      { grams: 1000, price: 300.00 }
     ],
     beans: true,
-    ground: false,
+    ground: true,
     image: ''
   }
 ];
 
 window.RAFA_PALMA_METHODS = [
-  'Espresso',
+  '',
+  'Café passado — filtro de papel',
+  'Cafeteira elétrica — filtro de papel',
+  'Cafeteira elétrica — filtro permanente',
   'Hario V60',
-  'Filtro de papel / café passado',
   'Prensa Francesa',
   'Cafeteira Italiana / Moka',
+  'Espresso',
   'Aeropress',
-  'Outro',
+  'Clever',
+  'Outro método',
   'Não sei qual escolher'
 ];

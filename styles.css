@@ -550,3 +550,206 @@ section{
   .quick-cart strong{padding:10px 12px}
   body{padding-bottom:76px}
 }
+
+
+/* V10 — escolha segura da moagem */
+.method-select.needs-attention{
+  border-color:#954430!important;
+  box-shadow:0 0 0 3px rgba(149,68,48,.14)!important;
+}
+.method-help{
+  margin-top:6px;
+  font-size:.74rem;
+  line-height:1.4;
+  color:#624f41;
+}
+
+
+/* V11 — equilíbrio das seções + novo design do resumo do pedido */
+
+/* Faixa de diferenciais: respiro equivalente acima e abaixo */
+.trust-strip{
+  margin-top:30px!important;
+  margin-bottom:30px!important;
+}
+
+/* Passo a passo: conteúdo visualmente centralizado */
+.how-it-works,
+.steps-section,
+.process-section{
+  padding-top:28px!important;
+  padding-bottom:28px!important;
+}
+
+/* Resumo flutuante como um único cartão legível em fundos claros e escuros */
+.quick-cart{
+  background:#fbf7f2!important;
+  color:#171310!important;
+  border:1px solid #d8c8ba!important;
+  box-shadow:0 12px 34px rgba(23,19,16,.18)!important;
+  padding:9px 10px 9px 16px!important;
+}
+.quick-cart::before{
+  content:"MEU PEDIDO";
+  display:block;
+  position:absolute;
+  left:16px;
+  top:7px;
+  font-size:.58rem;
+  letter-spacing:.11em;
+  font-weight:800;
+  color:#954430;
+}
+.quick-cart span{
+  padding-top:11px;
+  color:#171310!important;
+}
+.quick-cart strong{
+  background:#954430!important;
+  color:#fff!important;
+  border-radius:10px!important;
+}
+@media(max-width:760px){
+  .quick-cart::before{display:none}
+  .quick-cart span{padding-top:0}
+  .trust-strip{margin-top:20px!important;margin-bottom:20px!important}
+}
+
+
+/* V12 — correção definitiva de alturas */
+
+/* 1) Espaço entre faixa preta de diferenciais e "Escolha seu café" */
+.trust-strip{
+  margin-bottom:12px!important;
+}
+#cafes,
+.products-section{
+  padding-top:30px!important;
+}
+
+/* 2) Bloco "Simples do início ao fim" — remover qualquer altura herdada */
+.how-it-works,
+.steps-section,
+.process-section,
+section.how-it-works,
+section.steps-section,
+section.process-section{
+  min-height:unset!important;
+  height:auto!important;
+  max-height:none!important;
+  padding-top:26px!important;
+  padding-bottom:26px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+  display:block!important;
+}
+
+.how-it-works > *,
+.steps-section > *,
+.process-section > *{
+  min-height:0!important;
+}
+
+.how-it-works .container,
+.steps-section .container,
+.process-section .container,
+.how-it-works .section-inner,
+.steps-section .section-inner,
+.process-section .section-inner{
+  min-height:0!important;
+  height:auto!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+.how-it-works .section-kicker,
+.steps-section .section-kicker,
+.process-section .section-kicker{
+  margin-top:0!important;
+  margin-bottom:10px!important;
+}
+
+.how-it-works h2,
+.steps-section h2,
+.process-section h2{
+  margin-top:0!important;
+  margin-bottom:18px!important;
+}
+
+.steps-grid,
+.process-grid{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  align-items:stretch!important;
+}
+
+.step-card,
+.process-card{
+  min-height:0!important;
+  height:auto!important;
+  margin:0!important;
+}
+
+/* reduz eventuais espaçadores invisíveis/decorações internas */
+.how-it-works::before,
+.how-it-works::after,
+.steps-section::before,
+.steps-section::after,
+.process-section::before,
+.process-section::after{
+  min-height:0!important;
+}
+
+/* Rodapé encosta de forma equilibrada após a seção */
+.site-footer{
+  margin-top:0!important;
+}
+
+@media(max-width:760px){
+  .trust-strip{margin-bottom:10px!important}
+  #cafes,.products-section{padding-top:24px!important}
+  .how-it-works,
+  .steps-section,
+  .process-section{
+    padding-top:22px!important;
+    padding-bottom:22px!important;
+  }
+}
+
+
+/* V13 — correção no seletor real da seção "SIMPLES DO INÍCIO AO FIM" */
+section.how-section.section{
+  padding-top:34px!important;
+  padding-bottom:34px!important;
+  min-height:0!important;
+  height:auto!important;
+}
+
+section.how-section .section-heading.compact{
+  margin-top:0!important;
+  margin-bottom:22px!important;
+}
+
+section.how-section .steps{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+
+section.how-section .steps article{
+  padding:20px 22px!important;
+  min-height:0!important;
+}
+
+section.how-section .steps h3{
+  margin-top:20px!important;
+}
+
+/* Mobile */
+@media(max-width:620px){
+  section.how-section.section{
+    padding-top:28px!important;
+    padding-bottom:28px!important;
+  }
+}
