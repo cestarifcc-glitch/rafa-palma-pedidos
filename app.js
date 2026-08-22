@@ -8,7 +8,7 @@ const byId = id => document.getElementById(id);
 
 function productCard(product){
   const firstSize = product.sizes[0];
-  const sizeButtons = product.sizes.map((s,i)=>`<button type="button" class="size-btn ${i===0?'active':''}" data-grams="${s.grams}" data-price="${s.price}">${s.grams} g</button>`).join('');
+  const sizeButtons = product.sizes.map((s,i)=>`<button type="button" class="size-btn ${i===0?'active':''}" data-grams="${s.grams}" data-price="${s.price}">${s.grams === 1000 ? '1 kg' : s.grams + ' g'}</button>`).join('');
   const typeButtons = [
     product.beans ? `<button type="button" class="type-btn active" data-type="graos">Em grãos</button>` : '',
     product.ground ? `<button type="button" class="type-btn" data-type="moido">Moído</button>` : ''
