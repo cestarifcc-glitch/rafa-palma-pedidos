@@ -20,6 +20,7 @@ function productCard(product){
     <div class="product-body">
       <div class="product-title-row"><h3>${product.name}</h3><span class="product-price" data-price-display>${money(firstSize.price)}</span></div>
       <p class="product-desc">${product.description}</p>
+      ${product.details ? `<div class="coffee-preview"><p class="coffee-notes">${product.tasting}</p><strong class="coffee-score">${product.score}</strong><button type="button" class="coffee-details-toggle" aria-expanded="false">Conheça este café +</button><div class="coffee-details hidden"><p><strong>Variedade:</strong> ${product.details.variety}</p><p><strong>Processo:</strong> ${product.details.process}</p><p><strong>Origem:</strong> ${product.details.origin}</p><p><strong>Produtor:</strong> ${product.details.producer}</p><p><strong>Notas sensoriais:</strong> ${product.details.sensory}</p><p><strong>Pontuação:</strong> ${product.score}</p><p><strong>Torra:</strong> ${product.details.roast}</p><p><strong>Café especial:</strong> ${product.details.species}</p></div></div>` : ''}
       <span class="control-label">Tamanho</span><div class="segmented">${sizeButtons}</div>
       <span class="control-label">Como você prefere?</span><div class="segmented">${typeButtons}</div>
       ${product.ground ? `<div class="method-wrap hidden"><label class="control-label">Como você prepara seu café?</label><select class="method-select">${methods}</select><p class="helper hidden">Não se preocupe. Vamos indicar a moagem adequada para você.</p><div class="guidance-wrap hidden"><label class="control-label">Conte como você prepara seu café</label><textarea class="guidance-input" rows="2" placeholder="Ex.: uso coador de pano, cafeteira elétrica, filtro de papel..."></textarea><p class="guidance-help">Essa informação ajuda a Rafa Palma a indicar a moagem adequada.</p></div></div>`:''}
@@ -37,6 +38,14 @@ function methodOrderLabel(method){
 function renderProducts(){
   byId('productsGrid').innerHTML = PRODUCTS.map(productCard).join('');
   document.querySelectorAll('.product-card').forEach(card=>{
+    const detailsToggle=card.querySelector('.coffee-details-toggle');
+    if(detailsToggle) detailsToggle.addEventListener('click',()=>{
+      const details=card.querySelector('.coffee-details');
+      const opening=details.classList.contains('hidden');
+      details.classList.toggle('hidden');
+      detailsToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      detailsToggle.textContent=opening ? 'Fechar detalhes −' : 'Conheça este café +';
+    });
     card.querySelectorAll('.size-btn').forEach(btn=>btn.addEventListener('click',()=>{
       card.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
       card.dataset.selectedGrams=btn.dataset.grams; card.dataset.selectedPrice=btn.dataset.price;

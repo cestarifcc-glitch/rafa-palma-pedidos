@@ -1024,3 +1024,13 @@ section.how-section .steps h3{
   color:#624f41;
   font-size:.72rem;
 }
+
+
+/* TESTE DE DESCRIÇÃO — somente Meu Jeito */
+.coffee-preview{margin:2px 0 16px;padding:13px 14px;background:#f8f1e8;border:1px solid var(--line);border-radius:14px}
+.coffee-notes{margin:0 0 7px;font-size:.86rem;line-height:1.45;color:var(--ink);font-weight:650}
+.coffee-score{display:block;font-size:.84rem;color:var(--accent-dark);margin-bottom:7px}
+.coffee-details-toggle{border:0;background:transparent;padding:0;color:var(--accent-dark);font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.coffee-details{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:.8rem;line-height:1.45;color:var(--muted)}
+.coffee-details p{margin:0 0 6px}.coffee-details strong{color:var(--ink)}
+@media(max-width:620px){.coffee-preview{padding:12px;margin-bottom:14px}.coffee-notes{font-size:.84rem}.coffee-details{font-size:.78rem}}
