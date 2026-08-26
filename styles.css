@@ -1034,3 +1034,35 @@ section.how-section .steps h3{
 .coffee-details{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:.8rem;line-height:1.45;color:var(--muted)}
 .coffee-details p{margin:0 0 6px}.coffee-details strong{color:var(--ink)}
 @media(max-width:620px){.coffee-preview{padding:12px;margin-bottom:14px}.coffee-notes{font-size:.84rem}.coffee-details{font-size:.78rem}}
+
+
+/* V23 — número de identificação do pedido */
+.order-id-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:16px;
+  padding:14px 16px;
+  border:1px solid #d8c8ba;
+  border-radius:12px;
+  background:#fbf7f2;
+}
+.order-id-card span{
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#624f41;
+}
+.order-id-card strong{
+  font-size:1rem;
+  color:#954430;
+  white-space:nowrap;
+}
+@media(max-width:620px){
+  .order-id-card{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+}

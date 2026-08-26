@@ -2,9 +2,24 @@ const PRODUCTS = window.RAFA_PALMA_PRODUCTS || [];
 const METHODS = window.RAFA_PALMA_METHODS || [];
 const WHATSAPP_NUMBER = '5555991128100';
 
-const state = { cart: [], checkoutStep: 1 };
+const state = { cart: [], checkoutStep: 1, orderId: null };
 const money = v => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
 const byId = id => document.getElementById(id);
+
+const pad2 = n => String(n).padStart(2,'0');
+
+function generateOrderId(){
+  const d=new Date();
+  const date=`${pad2(d.getDate())}${pad2(d.getMonth()+1)}${String(d.getFullYear()).slice(-2)}`;
+  const time=`${pad2(d.getHours())}${pad2(d.getMinutes())}${pad2(d.getSeconds())}`;
+  return `RP-${date}-${time}`;
+}
+
+function ensureOrderId(){
+  if(!state.orderId) state.orderId=generateOrderId();
+  return state.orderId;
+}
+
 
 function productCard(product){
   const firstSize = product.sizes[0];
@@ -116,7 +131,7 @@ function renderCart(){
     quickSummary.textContent=`${count} ${count===1?'item':'itens'} · ${money(runningTotal)}`;
     quickCart.classList.toggle('hidden',count===0);
   }
-  if(!state.cart.length){items.innerHTML='';empty.classList.remove('hidden');footer.classList.add('hidden');return;}
+  if(!state.cart.length){state.orderId=null;items.innerHTML='';empty.classList.remove('hidden');footer.classList.add('hidden');return;}
   empty.classList.add('hidden');footer.classList.remove('hidden');
   items.innerHTML=state.cart.map((i,idx)=>`<div class="cart-item"><div><h4>${i.name} · ${i.grams} g</h4><div class="cart-meta">${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}${i.guidance?`<br><span class="cart-guidance">Como prepara: ${i.guidance}</span>`:''}`}</div><div class="cart-controls"><button class="qty-btn" data-action="minus" data-index="${idx}">−</button><strong>${i.qty}</strong><button class="qty-btn" data-action="plus" data-index="${idx}">+</button><button class="remove-btn" data-action="remove" data-index="${idx}">Excluir</button></div></div><div class="cart-price">${money(i.price*i.qty)}</div></div>`).join('');
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0); byId('cartTotal').textContent=money(total);
@@ -131,7 +146,7 @@ function renderCart(){
 
 function openCart(){byId('cartDrawer').classList.add('open');byId('cartDrawer').setAttribute('aria-hidden','false');byId('overlay').hidden=false}
 function closeCart(){byId('cartDrawer').classList.remove('open');byId('cartDrawer').setAttribute('aria-hidden','true');byId('overlay').hidden=true}
-function openCheckout(){if(!state.cart.length)return;closeCart();byId('checkoutModal').classList.add('open');byId('checkoutModal').setAttribute('aria-hidden','false');goStep(1)}
+function openCheckout(){if(!state.cart.length)return;ensureOrderId();closeCart();byId('checkoutModal').classList.add('open');byId('checkoutModal').setAttribute('aria-hidden','false');goStep(1)}
 function closeCheckout(){byId('checkoutModal').classList.remove('open');byId('checkoutModal').setAttribute('aria-hidden','true')}
 function goStep(step){state.checkoutStep=step;document.querySelectorAll('.checkout-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===step));document.querySelectorAll('[data-step-dot]').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepDot)<=step));byId('checkoutTitle').textContent=step===1?'Seus dados':step===2?'Entrega':'Resumo do seu pedido';if(step===3){saveRememberedCustomerData();renderReview()}}
 
@@ -325,6 +340,7 @@ function renderReview(){
   html+=state.cart.map(i=>`<div class="review-line"><div><strong>${i.qty} × ${i.name} ${i.grams} g</strong><small>${i.type==='graos'?'Em grãos':`Moído · ${methodOrderLabel(i.method)}${i.guidance?`<br>Como prepara: ${i.guidance}`:''}`}</small></div><strong>${money(i.qty*i.price)}</strong></div>`).join('');
   const delivery=form.delivery.value==='retirada'?'Retirada':`${form.street.value}, ${form.number.value} · ${form.district.value} · ${form.city.value}/${form.state.value.toUpperCase()}`;
   html+=`<div class="review-line"><div><strong>Entrega</strong><small>${delivery}</small></div></div><div class="review-line review-total"><span>Total dos produtos</span><strong>${money(total)}</strong></div><p class="freight-note">Entrega: frete calculado após o envio do pedido antes do pagamento.</p>`;
+  html=`<div class="order-id-card"><span>NÚMERO DO PEDIDO</span><strong>#${ensureOrderId()}</strong></div>`+html;
   byId('orderReview').innerHTML=html;
 }
 
@@ -334,8 +350,10 @@ function buildWhatsAppMessage(){
   const total=state.cart.reduce((s,i)=>s+i.price*i.qty,0);
   const isPickup=f.delivery.value==='retirada';
 
+  const orderId=ensureOrderId();
   const lines=[
     '☕ *NOVO PEDIDO — CAFÉ RAFA PALMA*',
+    `*Pedido: #${orderId}*`,
     '',
     '👤 *CLIENTE*',
     `Nome: ${f.name.value}`,
